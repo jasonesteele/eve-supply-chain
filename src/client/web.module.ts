@@ -22,6 +22,8 @@ import { AnalyticsModule } from './app/modules/analytics/index';
 import { MultilingualModule, Languages, translateLoaderFactory, MultilingualEffects } from './app/modules/i18n/index';
 import { SampleModule, SampleEffects } from './app/modules/sample/index';
 import { AppReducer } from './app/modules/ngrx/index';
+import { ApiModule } from './app/modules/esi-client/api.module';
+import { HttpClientModule } from "@angular/common/http";
 
 // config
 Config.PLATFORM_TARGET = Config.PLATFORMS.WEB;
@@ -79,7 +81,9 @@ if (String('<%= BUILD_TYPE %>') === 'dev') {
       deps: [Http],
       useFactory: (translateLoaderFactory)
     }]),
+    HttpClientModule,
     SampleModule,
+    ApiModule,
     // configure app state
     StoreModule.provideStore(AppReducer),
     EffectsModule.run(MultilingualEffects),

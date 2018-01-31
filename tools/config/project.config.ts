@@ -1,5 +1,7 @@
 import { join } from 'path';
 import { SeedAdvancedConfig } from './seed-advanced.config';
+import { ExtendPackages } from './seed.config.interfaces';
+
 // import { ExtendPackages } from './seed.config.interfaces';
 
 /**
@@ -9,7 +11,7 @@ import { SeedAdvancedConfig } from './seed-advanced.config';
 export class ProjectConfig extends SeedAdvancedConfig {
 
   PROJECT_TASKS_DIR = join(process.cwd(), this.TOOLS_DIR, 'tasks', 'project');
-  
+
   constructor() {
     super();
     // this.APP_TITLE = 'Put name of your app here';
@@ -21,6 +23,7 @@ export class ProjectConfig extends SeedAdvancedConfig {
     // Add `NPM` third-party libraries to be injected/bundled.
     this.NPM_DEPENDENCIES = [
       ...this.NPM_DEPENDENCIES,
+      {src: 'yamljs/dist/yaml.js', inject: 'libs'}
       // {src: 'jquery/dist/jquery.min.js', inject: 'libs'},
     ];
 
@@ -42,13 +45,26 @@ export class ProjectConfig extends SeedAdvancedConfig {
 
     // Add packages (e.g. ng2-translate)
     // ng2-translate is already added with the advanced seed - here for example only
-    // let additionalPackages: ExtendPackages[] = [{
-    //   name: 'ng2-translate',
-    //   // Path to the package's bundle
-    //   path: 'node_modules/ng2-translate/bundles/ng2-translate.umd.js'
-    // }];
-    //
-    // this.addPackagesBundles(additionalPackages);
+    let additionalPackages: ExtendPackages[] = [
+      {
+        name: '@angular/common/http',
+        path: 'node_modules/@angular/common',
+        packageMeta: {
+          main: 'bundles/common-http.umd.js',
+          defaultExtension: 'js'
+        }
+      },
+      {
+        name: 'tslib',
+        path: 'node_modules/tslib',
+        packageMeta: {
+          main: 'tslib.js',
+          defaultExtension: 'js'
+        }
+      },
+    ]
+
+    this.addPackagesBundles(additionalPackages);
 
     /* Add proxy middleware */
     // this.PROXY_MIDDLEWARE = [
