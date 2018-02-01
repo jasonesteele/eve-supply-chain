@@ -8,7 +8,7 @@ import { getNames, IAppState } from '../../modules/ngrx/index';
 import { NameList } from '../../modules/sample/index';
 import { CharacterService } from '../../modules/esi-client/api/character.service';
 import { LogService } from '../../modules/core/services/logging/log.service';
-import { BlueprintService } from '../../modules/eve-data/services/blueprints.service';
+import { BlueprintService } from '../../modules/eve-data/services/blueprint.service';
 
 @Component({
   moduleId: module.id,

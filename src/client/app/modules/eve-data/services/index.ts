@@ -1,6 +1,6 @@
 // app
 import { EveStaticDataService } from './eve-static-data.service';
-import { BlueprintService } from './blueprints.service';
+import { BlueprintService } from './blueprint.service';
 
 export const EVE_DATA_PROVIDERS: Array<any> = [
   EveStaticDataService,
@@ -9,4 +9,4 @@ export const EVE_DATA_PROVIDERS: Array<any> = [
 
 // services
 export * from './eve-static-data.service';
-export * from './blueprints.service';
+export * from './blueprint.service';

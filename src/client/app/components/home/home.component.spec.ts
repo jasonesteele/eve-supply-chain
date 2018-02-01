@@ -2,37 +2,42 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import {
-  BaseRequestOptions,
-  ConnectionBackend,
-  Http
-} from '@angular/http';
+import { BaseRequestOptions, ConnectionBackend, Http } from '@angular/http';
 import { MockBackend } from '@angular/http/testing';
-
 // libs
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
 import { t } from '../../modules/test/index';
-import { NameListService, SampleEffects, reducer } from '../../modules/sample/index';
+import { NameListService, reducer, SampleEffects } from '../../modules/sample/index';
 import { CoreModule } from '../../modules/core/core.module';
 import { AnalyticsModule } from '../../modules/analytics/analytics.module';
 import { MultilingualModule } from '../../modules/i18n/multilingual.module';
 import { LanguageProviders } from '../../modules/i18n/index';
 import { SharedModule } from '../../modules/shared/index';
 import { HomeComponent } from './home.component';
+import { consoleLogTarget } from '../../../web.module';
+import { ConsoleService, LogTarget } from '../../modules/core/services/index';
+import { ApiModule } from '../../modules/esi-client/api.module';
+import { HttpClientModule } from '@angular/common/http';
+import { EveDataModule } from '../../modules/eve-data/eve-data.module';
 
 // test module configuration for each test
 const testModuleConfig = () => {
   TestBed.configureTestingModule({
     imports: [
-      CoreModule,
+      CoreModule.forRoot([
+        {provide: LogTarget, useFactory: (consoleLogTarget), deps: [ConsoleService], multi: true}
+      ]),
       SharedModule,
       RouterTestingModule,
+      HttpClientModule,
       AnalyticsModule,
       MultilingualModule,
-      StoreModule.provideStore({ sample: reducer }),
-      EffectsModule.run(SampleEffects)
+      StoreModule.provideStore({sample: reducer}),
+      EffectsModule.run(SampleEffects),
+      ApiModule,
+      EveDataModule
     ],
     declarations: [HomeComponent, TestComponent],
     providers: [
