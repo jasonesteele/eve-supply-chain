@@ -26,7 +26,7 @@ export class EveStaticDataService {
       retval = new ReplaySubject<any>(1);
       this.http.get(`assets/sde/${path}`)
         .subscribe(data => {
-          this.cache[path] = data;
+          this.cache[path] = retval;
           retval.next(data);
         }, err => {
           retval.error(err);
