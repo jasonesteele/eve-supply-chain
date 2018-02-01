@@ -8,7 +8,7 @@ import { getNames, IAppState } from '../../modules/ngrx/index';
 import { NameList } from '../../modules/sample/index';
 import { CharacterService } from '../../modules/esi-client/api/character.service';
 import { LogService } from '../../modules/core/services/logging/log.service';
-import { HttpClient } from '@angular/common/http';
+import { BlueprintService } from '../../modules/eve-data/services/blueprints.service';
 
 @Component({
   moduleId: module.id,
@@ -24,19 +24,18 @@ export class HomeComponent implements OnInit {
               public routerext: RouterExtensions,
               public log: LogService,
               private characterService: CharacterService,
-              private http: HttpClient) {
+              private blueprintService: BlueprintService) {
   }
 
   ngOnInit() {
     this.names$ = this.store.let(getNames);
     this.newName = '';
 
-    this.http.get('http://localhost:5555/assets/sde/bsd/invNames.json')
-      .subscribe(data => {
-        this.log.info("skins retrieved from server", data)
-      }, err => {
-        this.log.error('error retrieving skins', err);
-      });
+    this.blueprintService.getBlueprints().subscribe(val => {
+      this.log.info('retrieved blueprints', val);
+    }, err => {
+      this.log.error('error retrieving blueprints', err);
+    });
 
     this.characterService.getCharactersCharacterId(2113645220, 'tranquility', 'Eve Supply Chain').subscribe(val => {
       this.log.info('retrieved character', val);
