@@ -57,30 +57,7 @@ const testModuleConfig = () => {
 
 export function main() {
   t.describe('@Component: HomeComponent', () => {
-
     t.be(testModuleConfig);
-
-    t.it('should work',
-      t.async(() => {
-        TestBed.compileComponents()
-          .then(() => {
-            let fixture = TestBed.createComponent(TestComponent);
-            fixture.detectChanges();
-
-            let homeInstance = fixture.debugElement.children[0].componentInstance;
-            let homeDOMEl = fixture.debugElement.children[0].nativeElement;
-
-            t.e(homeDOMEl.querySelectorAll('li').length).toEqual(0);
-
-            homeInstance.newName = 'Minko';
-            homeInstance.addName();
-
-            fixture.detectChanges();
-
-            t.e(homeDOMEl.querySelectorAll('li').length).toEqual(1);
-            t.e(homeDOMEl.querySelectorAll('li')[0].textContent).toEqual('Minko');
-          });
-      }));
   });
 }
 

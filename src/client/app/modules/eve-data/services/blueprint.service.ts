@@ -1,17 +1,34 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { Blueprint, IndustrialActivity, ItemStack } from '../eve-data-types';
+import { Blueprint, BlueprintActivities, IndustrialActivity, ItemStack, ItemType, SkillLevel } from '../eve-data-types';
 import { LogService } from '../../core/services/logging/log.service';
 import { EveStaticDataService } from './eve-static-data.service';
-import { Subject } from 'rxjs/Subject';
+import { forkJoin } from 'rxjs/observable/forkJoin';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { ItemTypeService } from './item-type.service';
 
 /**
  * Service for querying Eve blueprints.
  */
 @Injectable()
 export class BlueprintService {
+  private blueprints = new ReplaySubject<Blueprint[]>(1);
+
   constructor(public log: LogService,
-              private dataService: EveStaticDataService) {
+              private dataService: EveStaticDataService,
+              private itemTypeService: ItemTypeService) {
+    const vm = this;
+    dataService.get('fsd/blueprints.json').subscribe(json => {
+      let bpObs: Observable<Blueprint>[] = [];
+      for (const blueprintId in json) {
+        bpObs.push(vm.translateBlueprint(json[blueprintId]));
+      }
+      forkJoin(bpObs).subscribe(
+        (it) => vm.blueprints.next(it),
+        (err) => vm.blueprints.error(err),
+        () => vm.blueprints.complete()
+      );
+    });
   }
 
   /**
@@ -20,157 +37,125 @@ export class BlueprintService {
    * @returns {Observable<Blueprint[]>}
    */
   public getBlueprints(unpublished?: boolean): Observable<Blueprint[]> {
-    let retval = new Subject<Blueprint[]>();
-    this.dataService.get('fsd/blueprints.json').subscribe(data => {
-      let blueprints: Blueprint[] = [];
-      for (let key in data) {
-        blueprints.push(this.translateBlueprint(data[key]));
-      }
-      retval.next(blueprints);
-    }, error => {
-      this.log.error('error loading blueprint static data', error);
-    });
-    return retval;
-  }
-
-  /**
-   * Retrieves a blueprint by blueprint id.
-   * @param {number} id blueprint type identifier
-   * @returns {Observable<Blueprint>}
-   */
-  public findById(id: number): Observable<Blueprint> {
-    let retval = new Subject<Blueprint>();
-    this.dataService.get('bsd/invNames.json').subscribe(data => {
-      let json = data.find(it => it.blueprintTypeID === id);
-      if (json) {
-        retval.next(this.translateBlueprint(json));
-      } else {
-        retval.error(`blueprint id ${id} not found}`);
-      }
-    }, error => {
-      this.log.error('error loading blueprint static data', error);
-    });
-    return retval;
-  }
-
-  /**
-   * Retrieves a list of blueprints partially matching the given name.
-   * @param {string} pattern blueprint name pattern
-   * @param {boolean} unpublished true to return unpublished blueprints as well
-   * @returns {Observable<Blueprint[]>}
-   */
-  public findByName(pattern: string, unpublished?: boolean): Observable<Blueprint[]> {
-    let retval = new Subject<Blueprint[]>();
-    this.dataService.get('fsd/blueprints.json').subscribe(data => {
-      let blueprints: Blueprint[] = [];
-      for (let key in data) {
-        let blueprint = this.translateBlueprint(data[key]);
-        if (blueprint.name.toLowerCase().indexOf(pattern.toLowerCase()) != -1) {
-          blueprints.push(blueprint);
-        }
-      }
-      retval.next(blueprints);
-    }, error => {
-      this.log.error('error loading blueprint static data', error);
-    });
-    return retval;
-  }
-
-  /**
-   * Finds the blueprint that manufactures a product.
-   * @param {string} id product id
-   * @returns {Observable<Blueprint[]>}
-   */
-  public findByProductId(id: number): Observable<Blueprint[]> {
-    let retval = new Subject<Blueprint[]>();
-    this.dataService.get('fsd/blueprints.json').subscribe(data => {
-      let blueprints: Blueprint[] = [];
-      for (let key in data) {
-        let blueprint = this.translateBlueprint(data[key]);
-        if (blueprint.activities.manufacturing
-          && blueprint.activities.manufacturing.products.filter(it => it.type.id === id).length > 0) {
-          blueprints.push(blueprint);
-        }
-      }
-      retval.next(blueprints);
-    }, error => {
-      this.log.error('error loading blueprint static data', error);
-    });
-    return retval;
+    return this.blueprints;  // TODO - use unpublished flag
   }
 
   /**
    * Translates Eve static data into app internal format.
    * @param json blueprint static data element
-   * @returns {Blueprint}
+   * @returns {Observable<Blueprint>}
    */
-  private translateBlueprint(json: any): Blueprint {
-    let blueprint: Blueprint = {
-      id: json.blueprintTypeID,
-      name: 'BLUEPRINT',  // TODO get item type name
-      maxProductLimit: json.maxProductionLimit,
-      activities: {}
-    };
-
-    if (json.activities.hasOwnProperty('copying')) {
-      blueprint.activities.copying = this.translateActivity(json.activities.copying);
-    }
-    if (json.activities.hasOwnProperty('manufacturing')) {
-      blueprint.activities.manufacturing = this.translateActivity(json.activities.manufacturing);
-    }
-    if (json.activities.hasOwnProperty('research_material')) {
-      blueprint.activities.researchMaterial = this.translateActivity(json.activities.research_material);
-    }
-    if (json.activities.hasOwnProperty('invention')) {
-      blueprint.activities.invention = this.translateActivity(json.activities.invention);
-    }
-    return blueprint;
+  private translateBlueprint(json: any): Observable<Blueprint> {
+    return forkJoin([
+      Observable.of(json),
+      this.itemTypeService.getType(json.blueprintTypeID),
+      this.translateActivity(json.activities.copying),
+      this.translateActivity(json.activities.manufacturing),
+      this.translateActivity(json.activities.research_material),
+      this.translateActivity(json.activities.research_time),
+      this.translateActivity(json.activities.invention)
+    ], (json, type, copying, manufacturing, researchMaterial, researchTime, invention) => {
+      let activities: BlueprintActivities = {};
+      if (copying) {
+        activities.copying = copying;
+      }
+      if (manufacturing) {
+        activities.manufacturing = manufacturing;
+      }
+      if (researchMaterial) {
+        activities.researchMaterial = researchMaterial;
+      }
+      if (researchTime) {
+        activities.researchTime = researchTime;
+      }
+      if (invention) {
+        activities.invention = invention;
+      }
+      return Object.assign({}, type, {
+        id: json.blueprintTypeID,
+        maxProductLimit: json.maxProductionLimit,
+        activities: activities
+      });
+    });
   }
 
-  private translateActivity(json: any): IndustrialActivity {
-    let activity: IndustrialActivity = {
-      time: json.time
-    };
+  /**
+   * Translates an industrial activity into app internal format.
+   * @param json static data element for activity
+   * @returns {Observable<IndustrialActivity>}
+   */
+  private translateActivity(json: any): Observable<IndustrialActivity> {
+    return !json ? Observable.of(undefined) : forkJoin([
+      Observable.of(json),
+      this.translateBom(json.materials),
+      this.translateBom(json.products),
+      this.translateSkills(json.skills),
+    ], (json: any, materials, products, skills) => {
+      let activity: IndustrialActivity = {
+        time: json.time
+      };
+      if (materials) {
+        Object.assign(activity, {materials: materials});
+      }
+      if (products) {
+        Object.assign(activity, {products: products});
+      }
+      if (skills) {
+        Object.assign(activity, {skills: skills});
+      }
+      return activity;
+    });
+  }
 
-    if (json.hasOwnProperty('materials')) {
-      activity.materials = json.materials.map(it => {
-        return {
+  /**
+   * Translates a bill of materials to app internal format.
+   * @param json static data element for activiti
+   * @returns {Observable<ItemStack[]>}
+   */
+  private translateBom(json: any): Observable<ItemStack[]> {
+    if (!json) return Observable.of(undefined);
+
+    return forkJoin([
+      Observable.of(json),
+      this.itemTypeService.getTypes(json.map(it => it.typeID))
+    ], (json: any, types: ItemType[]) => {
+      return json.map(it => {
+        let type = types.find(typeIt => {
+          return typeIt && typeIt.id === it.typeID
+        });
+        let retval = {
           quantity: it.quantity,
-          type: {
-            id: it.typeID,
-            name: 'MATERIAL' // TODO get item type name
-          }
-        }
-      });
-    }
-    if (json.hasOwnProperty('products')) {
-      activity.products = json.products.map(it => {
-        let product: ItemStack = {
-          quantity: it.quantity,
-          type: {
-            id: it.typeID,
-            name: 'PRODUCT' // TODO get item type name
-          }
+          type: type
         };
-        if (it.hasOwnProperty('probability')) {
-          product.probability = it.probability;
+        if (it.probability) {
+          Object.assign(retval, { probability: it.probability })
         }
-        return product;
+        return retval;
       });
-    }
-    if (json.hasOwnProperty('skills')) {
-      activity.skills = json.skills.map(it => {
-        return {
-          quantity: it.quantity,
-          type: {
-            id: it.typeID,
-            name: 'SKILL', // TODO get item type name
-            level: it.level
-          }
-        }
-      });
-    }
+    });
+  }
 
-    return activity;
+  /**
+   * Translates list of skill requirements to app internal format.
+   * @param json
+   * @returns {Observable<SkillLevel[]>}
+   */
+  private translateSkills(json: any): Observable<SkillLevel[]> {
+    if (!json) return Observable.of(undefined);
+
+    return forkJoin([
+      Observable.of(json),
+      this.itemTypeService.getTypes(json.map(it => it.typeID))
+    ], (json: any, types: ItemType[]) => {
+      return json.map(it => {
+        let type = types.find(typeIt => {
+          return typeIt && typeIt.id === it.typeID
+        });
+        return {
+          type: type,
+          level: it.level
+        }
+      });
+    });
   }
 }

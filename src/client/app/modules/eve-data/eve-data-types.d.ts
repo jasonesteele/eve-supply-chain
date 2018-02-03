@@ -1,16 +1,21 @@
 export interface ItemType {
   id: number;
   name: string;
+  description?: string;
+  mass?: number;
+  volume?: number;
+  capacity?: number;
+  published?: boolean;
+  portionSize?: number;
 }
 
-export interface SkillRequirement extends ItemType {
+export interface SkillLevel extends ItemType {
   level: number;
 }
 
 export interface ItemStack {
   type: ItemType;
   quantity: number;
-  probability?: number;
 }
 
 export interface PossibleItemStack extends ItemStack {
@@ -20,7 +25,7 @@ export interface PossibleItemStack extends ItemStack {
 export interface IndustrialActivity {
   materials?: ItemStack[];
   products?: PossibleItemStack[];
-  skills?: SkillRequirement[]
+  skills?: SkillLevel[]
   time: number;
 }
 

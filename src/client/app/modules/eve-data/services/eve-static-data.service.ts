@@ -24,13 +24,13 @@ export class EveStaticDataService {
     let retval = this.cache[path];
     if (!retval) {
       retval = new ReplaySubject<any>(1);
+      this.cache[path] = retval;
       this.http.get(`assets/sde/${path}`)
         .subscribe(data => {
-          this.cache[path] = retval;
           retval.next(data);
         }, err => {
           retval.error(err);
-        });
+        }, () => retval.complete());
     }
     return retval;
   }

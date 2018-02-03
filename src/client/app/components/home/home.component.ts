@@ -5,9 +5,10 @@ import { Observable } from 'rxjs/Observable';
 // app
 import { RouterExtensions } from '../../modules/core/index';
 import { getNames, IAppState } from '../../modules/ngrx/index';
-import { NameList } from '../../modules/sample/index';
 import { CharacterService } from '../../modules/esi-client/api/character.service';
 import { LogService } from '../../modules/core/services/logging/log.service';
+import { EveStaticDataService } from '../../modules/eve-data/services/eve-static-data.service';
+import { ItemTypeService } from '../../modules/eve-data/services/item-type.service';
 import { BlueprintService } from '../../modules/eve-data/services/blueprint.service';
 
 @Component({
@@ -24,24 +25,15 @@ export class HomeComponent implements OnInit {
               public routerext: RouterExtensions,
               public log: LogService,
               private characterService: CharacterService,
-              private blueprintService: BlueprintService) {
+              private itemTypeService: ItemTypeService,
+              private blueprintService: BlueprintService,
+              private dataService: EveStaticDataService) {
   }
 
   ngOnInit() {
     this.names$ = this.store.let(getNames);
     this.newName = '';
 
-    this.blueprintService.getBlueprints().subscribe(val => {
-      this.log.info('retrieved blueprints', val);
-    }, err => {
-      this.log.error('error retrieving blueprints', err);
-    });
-
-    this.characterService.getCharactersCharacterId(2113645220, 'tranquility', 'Eve Supply Chain').subscribe(val => {
-      this.log.info('retrieved character', val);
-    }, err => {
-      this.log.error('error retrieving character', err);
-    });
   }
 
   /*
@@ -49,8 +41,22 @@ export class HomeComponent implements OnInit {
    * @returns return false to prevent default form submit behavior to refresh the page.
    */
   addName(): boolean {
-    this.store.dispatch(new NameList.AddAction(this.newName));
-    this.newName = '';
+    const vm = this;
+
+    vm.log.info('running test...');
+
+    //
+    // this.characterService.getCharactersCharacterId(2113645220, 'tranquility', 'Eve Supply Chain').subscribe(val => {
+    //   this.log.info('retrieved character', val);
+    // }, err => {
+    //   this.log.error('error retrieving character', err);
+    // });
+
+    this.blueprintService.getBlueprints().subscribe(
+      it => vm.log.info('getBlueprints(): next', it),
+      err => vm.log.error('getBlueprints(): error', err),
+      () => vm.log.info('getBlueprints(): complete')
+    );
     return false;
   }
 
