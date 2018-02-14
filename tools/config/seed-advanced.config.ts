@@ -59,7 +59,7 @@ export class SeedAdvancedConfig extends SeedConfig {
     this.BOOTSTRAP_PROD_MODULE = `${this.BOOTSTRAP_DIR}${bootstrap}`;
     this.BOOTSTRAP_FACTORY_PROD_MODULE = `${this.BOOTSTRAP_DIR}${bootstrap}.prod`;
 
-    this.APP_TITLE = 'Angular Seed Advanced';
+    this.APP_TITLE = 'Eve Supply Chain';
     this.APP_BASE = this.TARGET_DESKTOP ? '' // paths must remain relative for desktop build
       : '/';
 

@@ -1,4 +1,4 @@
-import * as chalk from 'chalk';
+import chalk from 'chalk';
 import { lstatSync, readdirSync } from 'fs';
 import * as util from 'gulp-util';
 import * as rimraf from 'rimraf';

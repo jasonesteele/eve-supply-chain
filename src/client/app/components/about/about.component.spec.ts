@@ -5,10 +5,14 @@ import { TestBed } from '@angular/core/testing';
 // app
 import { t } from '../../modules/test/index';
 import { AboutComponent } from './about.component';
+import { MultilingualModule } from '../../modules/i18n/multilingual.module';
 
 // test module configuration for each test
 const testModuleConfig = () => {
   TestBed.configureTestingModule({
+    imports: [
+      MultilingualModule
+    ],
     declarations: [AboutComponent, TestComponent]
   });
 };
@@ -26,7 +30,7 @@ export function main() {
             fixture.detectChanges();
             let aboutDOMEl = fixture.debugElement.children[0].nativeElement;
 
-            t.e(aboutDOMEl.querySelectorAll('h2')[0].textContent).toEqual('Contributors');
+            t.e(aboutDOMEl.querySelectorAll('h2')[0].textContent).toEqual('CONTRIBUTORS');
           });
       }));
   });

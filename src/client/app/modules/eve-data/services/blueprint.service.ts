@@ -1,6 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { Blueprint, BlueprintActivities, IndustrialActivity, ItemStack, ItemType, SkillLevel } from '../eve-data-types';
+import {
+  BlueprintActivities,
+  BlueprintType,
+  IndustrialActivity,
+  ItemStack,
+  ItemType,
+  SkillLevel
+} from '../eve-data-types';
 import { LogService } from '../../core/services/logging/log.service';
 import { EveStaticDataService } from './eve-static-data.service';
 import { forkJoin } from 'rxjs/observable/forkJoin';
@@ -12,19 +19,25 @@ import { ItemTypeService } from './item-type.service';
  */
 @Injectable()
 export class BlueprintService {
-  private blueprints = new ReplaySubject<Blueprint[]>(1);
+  private blueprints = new ReplaySubject<Map<number, BlueprintType>>(1);
 
   constructor(public log: LogService,
               private dataService: EveStaticDataService,
               private itemTypeService: ItemTypeService) {
     const vm = this;
     dataService.get('fsd/blueprints.json').subscribe(json => {
-      let bpObs: Observable<Blueprint>[] = [];
+      let bpObs: Observable<BlueprintType>[] = [];
       for (const blueprintId in json) {
         bpObs.push(vm.translateBlueprint(json[blueprintId]));
       }
       forkJoin(bpObs).subscribe(
-        (it) => vm.blueprints.next(it),
+        (it) => {
+          let bpMap: Map<number, BlueprintType> = new Map<number, BlueprintType>();
+          for (const bp of it) {
+            bpMap.set(bp.id, bp);
+          }
+          return vm.blueprints.next(bpMap)
+        },
         (err) => vm.blueprints.error(err),
         () => vm.blueprints.complete()
       );
@@ -34,18 +47,24 @@ export class BlueprintService {
   /**
    * Gets all blueprints known to Eve.
    * @param {boolean} unpublished true to return unpublished blueprints as well
-   * @returns {Observable<Blueprint[]>}
+   * @returns {Observable<BlueprintType[]>}
    */
-  public getBlueprints(unpublished?: boolean): Observable<Blueprint[]> {
-    return this.blueprints;  // TODO - use unpublished flag
+  public getBlueprints(unpublished?: boolean): Observable<BlueprintType[]> {
+    return this.blueprints
+      .map(it => {
+        return Array.from(it.values()).filter(it => {
+          return unpublished || it.published
+        });
+      });
   }
 
   /**
    * Translates Eve static data into app internal format.
    * @param json blueprint static data element
-   * @returns {Observable<Blueprint>}
+   * @returns {Observable<BlueprintType>}
    */
-  private translateBlueprint(json: any): Observable<Blueprint> {
+  private translateBlueprint(json: any): Observable<BlueprintType> {
+    const vm = this;
     return forkJoin([
       Observable.of(json),
       this.itemTypeService.getType(json.blueprintTypeID),
@@ -128,7 +147,7 @@ export class BlueprintService {
           type: type
         };
         if (it.probability) {
-          Object.assign(retval, { probability: it.probability })
+          Object.assign(retval, {probability: it.probability})
         }
         return retval;
       });

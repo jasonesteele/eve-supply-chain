@@ -23,7 +23,9 @@ export class ProjectConfig extends SeedAdvancedConfig {
     // Add `NPM` third-party libraries to be injected/bundled.
     this.NPM_DEPENDENCIES = [
       ...this.NPM_DEPENDENCIES,
-      // {src: 'jquery/dist/jquery.min.js', inject: 'libs'},
+      {src: 'datatables.net-dt/css/jquery.dataTables.css', inject: 'css'},
+      {src: 'jquery/dist/jquery.js', inject: 'libs'},
+      {src: 'datatables.net/js/jquery.dataTables.js', inject: 'libs'},
     ];
 
     // Add `local` third-party libraries to be injected/bundled.
@@ -61,7 +63,7 @@ export class ProjectConfig extends SeedAdvancedConfig {
           defaultExtension: 'js'
         }
       },
-    ]
+    ];
 
     this.addPackagesBundles(additionalPackages);
 

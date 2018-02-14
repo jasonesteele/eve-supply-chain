@@ -1,41 +1,34 @@
 <div>
   <p>
-    Eve Supply Chain is an open source corporate industry planning tool for Eve Online.
+    {{ 'ABOUT_MSG' | translate }}
   </p>
-  <h2>Contributors</h2>
+  <h2>{{ 'CONTRIBUTORS' | translate }}</h2>
   <ul>
     <li>Jason Steele (<b>Zim Zallabim</b>)</li>
   </ul>
-  <h2>Features</h2>
+  <h2>{{ 'FEATURES' | translate }}</h2>
   <ul>
-    <li>TO DO</li>
+    <li>{{ 'TODO' | translate }}</li>
+  </ul>
+  <h2>{{ 'ROADMAP' | translate }}</h2>
+  <ul>
+    <li>{{ 'TODO' | translate }}</li>
   </ul>
   <p>
-    <small>
-      You can find the source and latest releases on <a target="_other"
-                                                        href="https://github.com/jasonesteele/eve-supply-chain">Github</a>.
+    <small [innerHTML]="'FIND_SOURCE_AT' | translate:{url: 'https://github.com/jasonesteele/eve-supply-chain'}">
     </small>
   </p>
   <p>
-    <small>
-      If you like this tool want want to support development, feel free to donate ISK to <b>Zim Zallabim</b> in game.
+    <small [innerHTML]="'DONATION_MSG' | translate">
     </small>
   </p>
   <hr>
   <div class="disclaimer">
     <p>
-      Copyright © 2018 Jason Steele under the <a href="https://choosealicense.com/licenses/apache-2.0/">Apache 2.0</a> license.
+      {{ 'COPYRIGHT' | translate }}
     </p>
     <p>
-      EVE Online and the EVE logo are the registered trademarks of CCP hf. All rights are reserved worldwide. All other
-      trademarks are the property of their respective owners. EVE Online, the EVE logo, EVE and all associated logos and
-      designs are the intellectual property of CCP hf. All artwork, screenshots, characters, vehicles, storylines, world
-      facts or other recognizable features of the intellectual property relating to these trademarks are likewise the
-      intellectual property of CCP hf. CCP hf. has granted permission to EVE Supply Chain to use EVE Online and all
-      associated logos and designs for promotional and information purposes on its website but does not endorse, and is
-      not in any
-      way affiliated with, EVE Supply Chain. CCP is in no way responsible for the content on or functioning of this
-      website, nor can it be liable for any damage arising from the use of this website.
+      {{ 'DISCLAIMER' | translate }}
     </p>
   </div>
 </div>

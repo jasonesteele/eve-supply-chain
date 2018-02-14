@@ -7,7 +7,6 @@ import { RouterExtensions } from '../../modules/core/index';
 import { getNames, IAppState } from '../../modules/ngrx/index';
 import { CharacterService } from '../../modules/esi-client/api/character.service';
 import { LogService } from '../../modules/core/services/logging/log.service';
-import { EveStaticDataService } from '../../modules/eve-data/services/eve-static-data.service';
 import { ItemTypeService } from '../../modules/eve-data/services/item-type.service';
 import { BlueprintService } from '../../modules/eve-data/services/blueprint.service';
 
@@ -26,8 +25,7 @@ export class HomeComponent implements OnInit {
               public log: LogService,
               private characterService: CharacterService,
               private itemTypeService: ItemTypeService,
-              private blueprintService: BlueprintService,
-              private dataService: EveStaticDataService) {
+              private blueprintService: BlueprintService) {
   }
 
   ngOnInit() {

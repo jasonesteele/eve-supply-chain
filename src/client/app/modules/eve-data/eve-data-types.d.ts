@@ -1,3 +1,14 @@
+export interface ItemGroup {
+  id: number;
+  name: string;
+  anchorable: boolean;
+  anchored: boolean;
+  categoryID: number;
+  fittableNonSingleton: boolean;
+  published: boolean;
+  useBasePrice: boolean;
+}
+
 export interface ItemType {
   id: number;
   name: string;
@@ -37,7 +48,7 @@ export interface BlueprintActivities {
   invention?: IndustrialActivity;
 }
 
-export interface Blueprint extends ItemType {
+export interface BlueprintType extends ItemType {
   activities: BlueprintActivities;
   maxProductLimit?: number;
 }
