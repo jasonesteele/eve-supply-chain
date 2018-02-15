@@ -5,3 +5,31 @@
   font-size: 8pt;
   font-style: italic;
 }
+
+.dataTables_wrapper .quick-filter {
+  float: right;
+}
+
+.dataTables_wrapper thead th {
+  white-space: nowrap;
+}
+
+.eve-icon {
+  position: relative;
+  top: 2px;
+  right: 2px;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  margin-right: 4px;
+}
+
+.eve-icon.eve-bpo {
+  background: url("../assets/eve-icons/items/BPO.png") no-repeat center;
+  background-size: 16px 16px;
+}
+
+.eve-icon.eve-help {
+  background: url("../assets/eve-icons/UI/WindowIcons/help.png") no-repeat center;
+  background-size: 16px 16px;
+}

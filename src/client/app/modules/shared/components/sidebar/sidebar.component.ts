@@ -5,13 +5,13 @@ import { LogService } from '../../../core/services/logging/log.service';
 
 @Component({
   moduleId: module.id,
-  selector: 'sd-toolbar',
-  templateUrl: 'toolbar.component.html',
+  selector: 'sd-sidebar',
+  templateUrl: 'sidebar.component.html',
   styleUrls: [
-    'toolbar.component.css',
+    'sidebar.component.css',
   ],
 })
-export class ToolbarComponent {
+export class SidebarComponent {
 
   constructor(private log: LogService) {}
 

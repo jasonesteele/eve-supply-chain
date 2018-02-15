@@ -1,4 +1,4 @@
-import { Injector, Component } from '@angular/core';
+import { Injector, Component, AfterViewInit } from '@angular/core';
 import { Config } from '../../modules/core/index';
 
 @Component({
@@ -10,7 +10,6 @@ import { Config } from '../../modules/core/index';
   ],
 })
 export class AboutComponent {
-
   // Just one way you could handle the {N} `ui/page` Page class
   // in a shared component...
   private _page: any;

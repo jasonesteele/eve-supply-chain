@@ -1,0 +1,27 @@
+<!-- Left side column. contains the logo and sidebar -->
+<aside class="main-sidebar">
+
+  <!-- sidebar: style can be found in sidebar.less -->
+  <section class="sidebar">
+    <!-- Sidebar Menu -->
+    <ul class="sidebar-menu" data-widget="tree">
+      <!--<li class="header">Reference</li>-->
+      <!-- Optionally, you can add icons to the links -->
+
+      <li [routerLinkActive]="['active']">
+        <a [routerLink]="['/blueprints']">
+          <i class="eve-icon eve-bpo"></i>
+          <span>{{ 'BLUEPRINTS' | translate }}</span>
+        </a>
+      </li>
+      <li [routerLinkActive]="['active']">
+        <a [routerLink]="['/about']">
+          <i class="eve-icon eve-help"></i>
+          <span>{{ 'ABOUT' | translate }}</span>
+        </a>
+      </li>
+    </ul>
+    <!-- /.sidebar-menu -->
+  </section>
+  <!-- /.sidebar -->
+</aside>

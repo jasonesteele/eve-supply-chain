@@ -50,7 +50,11 @@ export class BlueprintsComponent implements OnInit, AfterViewInit {
       dom: '<"quick-filter"><"top"lip><"clear">r<"datatable-scroll"t><"bottom"ip><"clear">',
       pageLength: 25,
       lengthMenu: [25, 50, 100, 500],
-      order: [[ 0, "asc"]]
+      order: [[0, "asc"]],
+      columnDefs: [
+        {targets: 2, width: '5px', style: 'nowrap'},
+        {targets: 3, width: '5px', style: 'nowrap'},
+      ],
     }));
 
     this.table.subscribe(table => {
