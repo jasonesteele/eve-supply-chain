@@ -12,9 +12,15 @@ export class ProjectConfig extends SeedAdvancedConfig {
 
   PROJECT_TASKS_DIR = join(process.cwd(), this.TOOLS_DIR, 'tasks', 'project');
 
+  FONTS_DEST = `${this.APP_DEST}/fonts`;
+  FONTS_SRC = [
+    'node_modules/admin-lte/bootstrap/fonts/**',
+    'node_modules/font-awesome/fonts/**'
+  ];
+
   constructor() {
     super();
-    // this.APP_TITLE = 'Put name of your app here';
+    this.APP_TITLE = 'Eve Supply Chain';
     // this.GOOGLE_ANALYTICS_ID = 'Your site's ID';
 
     /* Enable typeless compiler runs (faster) between typed compiler runs. */
@@ -23,9 +29,25 @@ export class ProjectConfig extends SeedAdvancedConfig {
     // Add `NPM` third-party libraries to be injected/bundled.
     this.NPM_DEPENDENCIES = [
       ...this.NPM_DEPENDENCIES,
-      {src: 'datatables.net-dt/css/jquery.dataTables.css', inject: 'css'},
       {src: 'jquery/dist/jquery.js', inject: 'libs'},
+      {src: 'bootstrap/dist/js/bootstrap.js', inject: 'libs'},
+      {src: 'bootstrap-datepicker/dist/js/bootstrap-datepicker.js', inject: 'libs'},
       {src: 'datatables.net/js/jquery.dataTables.js', inject: 'libs'},
+      {src: 'fastclick/lib/fastclick.js', inject: 'libs'},
+      {src: 'moment/moment.js', inject: 'libs'},
+      {src: 'select2/dist/js/select2.js', inject: 'libs'},
+      {src: 'slimscroll/example/ssmaster/jquery.slimscroll.js', inject: 'libs'},
+      {src: 'admin-lte/dist/js/adminlte.js', inject: 'libs'},
+      {src: 'admin-lte/plugins/iCheck/icheck.min.js', inject: 'libs'},
+
+      {src: 'bootstrap/dist/css/bootstrap.css', inject: true},
+      {src: 'admin-lte/dist/css/AdminLTE.css', inject: true},
+      {src: 'admin-lte/dist/css/skins/skin-blue.css', inject: true},
+      {src: 'admin-lte/plugins/iCheck/square/blue.css', inject: true},
+      {src: 'bootstrap-datepicker/dist/css/bootstrap-datepicker3.css', inject: true},
+      {src: 'font-awesome/css/font-awesome.css', inject: true},
+      {src: 'select2/dist/css/select2.css', inject: true},
+      {src: 'datatables.net-dt/css/jquery.dataTables.css', inject: true},
     ];
 
     // Add `local` third-party libraries to be injected/bundled.
@@ -63,6 +85,26 @@ export class ProjectConfig extends SeedAdvancedConfig {
           defaultExtension: 'js'
         }
       },
+      {
+        name: 'ngx-toastr',
+        path: 'node_modules/ngx-toastr/toastr.umd.js'
+      },
+      {
+        name: 'lodash',
+        path: 'node_modules/lodash',
+        packageMeta: {
+          main: 'index.js',
+          defaultExtension: 'js'
+        }
+      },
+      {
+        name: 'ng-select',
+        path: 'node_modules/ng-select',
+        packageMeta: {
+          main: 'index.js',
+          defaultExtension: 'js'
+        }
+      }
     ];
 
     this.addPackagesBundles(additionalPackages);
