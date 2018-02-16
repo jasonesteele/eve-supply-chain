@@ -32,7 +32,7 @@ export class BlueprintsComponent implements OnInit, AfterViewInit {
       this.table.subscribe(table => {
         table.fnClearTable();
         if (this.blueprints.length > 0) {
-          table.fnAddData(blueprints);
+          table.fnAddData(this.blueprints);
         }
       });
     });
@@ -41,18 +41,31 @@ export class BlueprintsComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.table.next($(this.tableEl.nativeElement).dataTable({
       columns: [
-        {title: 'Name', defaultContent: '', data: 'name'},
-        {title: 'Group', defaultContent: '', data: 'group.name'},
-        {title: 'Max Runs', defaultContent: '', data: 'maxProductLimit'}
+        {
+          title: 'Activities', defaultContent: '', className: 'nowrap',
+          render: function (data: any, type: any, row: any, meta: any) {
+            let retval = '';
+            if (type === 'display') {
+              for (const key in row.activities) {
+                retval += ` <i class="eve-icon eve-${key} inverted"></i>`;
+              }
+            } else {
+              for (const key in row.activities) {
+                retval += key;
+              }
+            }
+            return retval;
+          }
+        },
+        {title: 'Blueprint Name', defaultContent: '', data: 'name'},
+        {title: 'Group', defaultContent: '', data: 'group.name'}
       ],
       pagingType: 'full',
       dom: '<"quick-filter"><"top"lip><"clear">r<"datatable-scroll"t><"bottom"ip><"clear">',
       pageLength: 25,
       lengthMenu: [25, 50, 100, 500],
-      order: [[0, "asc"]],
-      columnDefs: [
-        {targets: 2, width: '5px', style: 'nowrap'},
-      ],
+      order: [[1, "asc"]],
+      columnDefs: [{ targets: 0, orderable: false, width: '116px'}],
       responsive: true,
     }));
 

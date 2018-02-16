@@ -14,6 +14,10 @@
   white-space: nowrap;
 }
 
+.nowrap {
+  white-space: nowrap;
+}
+
 .eve-icon {
   position: relative;
   top: 2px;
@@ -24,6 +28,11 @@
   margin-right: 4px;
 }
 
+.eve-icon.inverted {
+  -webkit-filter: invert(1);
+  filter: invert(1);
+}
+
 .eve-icon.eve-bpo {
   background: url("../assets/eve-icons/items/BPO.png") no-repeat center;
   background-size: 16px 16px;
@@ -31,6 +40,36 @@
 
 .eve-icon.eve-help {
   background: url("../assets/eve-icons/UI/WindowIcons/help.png") no-repeat center;
+  background-size: 16px 16px;
+}
+
+.eve-icon.eve-copying {
+  background: url("../assets/eve-icons/UI/Industry/copying.png") no-repeat center;
+  background-size: 16px 16px;
+}
+
+.eve-icon.eve-manufacturing {
+  background: url("../assets/eve-icons/UI/Industry/manufacturing.png") no-repeat center;
+  background-size: 16px 16px;
+}
+
+.eve-icon.eve-researchTime {
+  background: url("../assets/eve-icons/UI/Industry/researchTime.png") no-repeat center;
+  background-size: 16px 16px;
+}
+
+.eve-icon.eve-researchMaterial {
+  background: url("../assets/eve-icons/UI/Industry/researchMaterial.png") no-repeat center;
+  background-size: 16px 16px;
+}
+
+.eve-icon.eve-invention {
+  background: url("../assets/eve-icons/UI/Industry/invention.png") no-repeat center;
+  background-size: 16px 16px;
+}
+
+.eve-icon.eve-reaction {
+  background: url("../assets/eve-icons/UI/Industry/reaction.png") no-repeat center;
   background-size: 16px 16px;
 }
 

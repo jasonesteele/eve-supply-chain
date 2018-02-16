@@ -18,6 +18,7 @@ export interface ItemType {
   capacity?: number;
   published?: boolean;
   portionSize?: number;
+  metaType?: ItemMetaType
 }
 
 export interface SkillLevel extends ItemType {
@@ -46,9 +47,21 @@ export interface BlueprintActivities {
   researchTime?: IndustrialActivity;
   manufacturing?: IndustrialActivity;
   invention?: IndustrialActivity;
+  reaction?: IndustrialActivity;
 }
 
 export interface BlueprintType extends ItemType {
   activities: BlueprintActivities;
   maxProductLimit?: number;
+}
+
+export interface ItemMetaGroup {
+  id: number;
+  name: string;
+}
+
+export interface ItemMetaType {
+  id: number;
+  metaGroup: ItemMetaGroup;
+  parentTypeId?: number;
 }

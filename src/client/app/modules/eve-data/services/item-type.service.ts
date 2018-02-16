@@ -7,6 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import { ItemGroupService } from './item-group.service';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { ItemMetaTypeService } from './item-meta-type.service';
 
 /**
  * Service for querying item type names.
@@ -18,7 +19,8 @@ export class ItemTypeService {
   constructor(dataService: EveStaticDataService,
               public log: LogService,
               private translate: TranslateService,
-              private itemGroupService: ItemGroupService) {
+              private itemGroupService: ItemGroupService,
+              private itemMetaTypeService: ItemMetaTypeService) {
     const vm = this;
     dataService.get('fsd/typeIDs.json').subscribe(json => {
       let typeObs: Observable<ItemType>[] = [];
@@ -72,12 +74,14 @@ export class ItemTypeService {
   private translateItemType(id: string, json: any): Observable<ItemType> {
     return forkJoin([
       Observable.of(json),
-      this.itemGroupService.getGroup(json.groupID)
-    ], (json, group) => {
+      this.itemGroupService.getGroup(json.groupID),
+      this.itemMetaTypeService.getMetaType(Number(id))
+    ], (json, group, metaType) => {
       return Object.assign({}, json, {
         id: Number(id),
         name: json.name[this.translate.currentLang] ? json.name[this.translate.currentLang] : json.name['en'],
-        group: group
+        group: group,
+        metaType: metaType
       });
     });
   }

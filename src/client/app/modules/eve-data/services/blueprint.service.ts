@@ -72,8 +72,9 @@ export class BlueprintService {
       this.translateActivity(json.activities.manufacturing),
       this.translateActivity(json.activities.research_material),
       this.translateActivity(json.activities.research_time),
-      this.translateActivity(json.activities.invention)
-    ], (json, type, copying, manufacturing, researchMaterial, researchTime, invention) => {
+      this.translateActivity(json.activities.invention),
+      this.translateActivity(json.activities.reaction),
+    ], (json, type, copying, manufacturing, researchMaterial, researchTime, invention, reaction) => {
       let activities: BlueprintActivities = {};
       if (copying) {
         activities.copying = copying;
@@ -89,6 +90,9 @@ export class BlueprintService {
       }
       if (invention) {
         activities.invention = invention;
+      }
+      if (reaction) {
+        activities.reaction = reaction;
       }
       return Object.assign({}, type, {
         id: json.blueprintTypeID,
