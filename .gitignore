@@ -68,3 +68,5 @@ ChromeDebugger-UserData
 
 # OS X trash files
 .DS_Store
+
+*.swp
