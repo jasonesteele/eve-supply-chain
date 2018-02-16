@@ -67,6 +67,8 @@ module.exports = function (config) {
       // suppress annoying 404 warnings for resources, images, etc.
       {pattern: 'dist/dev/assets/**/*', watched: false, included: false, served: true},
 
+      {pattern: 'node_modules/simple-element-resize-detector/**/*.js', included: false, watched: false}, // PhantomJS2 (and possibly others) might require it
+
       'test-config.js',
       'dist/dev/system-config.js',
       'test-main.js'

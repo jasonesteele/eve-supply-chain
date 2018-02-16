@@ -43,8 +43,7 @@ export class BlueprintsComponent implements OnInit, AfterViewInit {
       columns: [
         {title: 'Name', defaultContent: '', data: 'name'},
         {title: 'Group', defaultContent: '', data: 'group.name'},
-        {title: 'Max Runs', defaultContent: '', data: 'maxProductLimit'},
-        {title: 'Portion', defaultContent: '', data: 'portionSize'}
+        {title: 'Max Runs', defaultContent: '', data: 'maxProductLimit'}
       ],
       pagingType: 'full',
       dom: '<"quick-filter"><"top"lip><"clear">r<"datatable-scroll"t><"bottom"ip><"clear">',
@@ -53,8 +52,8 @@ export class BlueprintsComponent implements OnInit, AfterViewInit {
       order: [[0, "asc"]],
       columnDefs: [
         {targets: 2, width: '5px', style: 'nowrap'},
-        {targets: 3, width: '5px', style: 'nowrap'},
       ],
+      responsive: true,
     }));
 
     this.table.subscribe(table => {
