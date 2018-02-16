@@ -44,7 +44,7 @@ export class AppComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     const vm = this;
     observeResize(vm.panelElem.nativeElement, () => {
-      $('.main-sidebar').height($(document).outerHeight());
+      $('.main-sidebar').height($('.content-wrapper').outerHeight() + $('footer').outerHeight());
     });
   }
 }
