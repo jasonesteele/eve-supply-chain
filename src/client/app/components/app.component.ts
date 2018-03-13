@@ -6,6 +6,7 @@ import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { AnalyticsService } from '../modules/analytics/services/index';
 import { AppService, LogService } from '../modules/core/services/index';
 import { Config } from '../modules/core/utils/index';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 
 declare var $: any;
 
@@ -35,10 +36,30 @@ let observeResize = (element, handler) => {
 export class AppComponent implements AfterViewInit {
   @ViewChild('contentPanel') panelElem: ElementRef;
 
+  title: string;
+  description: string;
+
   constructor(public analytics: AnalyticsService,
-              public log: LogService,
-              private appService: AppService) {
+              private router: Router,
+              private activatedRoute: ActivatedRoute,
+              private appService: AppService,
+              public log: LogService) {
     log.debug(`Config env: ${Config.ENVIRONMENT().ENV}`);
+
+    const vm = this;
+    this.router.events
+      .filter(event => event instanceof NavigationEnd)
+      .map(() => this.activatedRoute)
+      .map(route => {
+        while (route.firstChild) route = route.firstChild;
+        return route;
+      })
+      .filter(route => route.outlet === 'primary')
+      .mergeMap(route => route.data)
+      .subscribe((event: any) => {
+        vm.title = event.hasOwnProperty('title') ? event.title : 'Page';
+        vm.description = event.hasOwnProperty('description') ? event.description : 'Page is loading';
+      });
   }
 
   ngAfterViewInit(): void {

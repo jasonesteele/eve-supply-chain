@@ -168,7 +168,7 @@
     "tildify": "^1.2.0",
     "traceur": "^0.0.111",
     "ts-node": "^3.0.4",
-    "tslint": "^5.0.0",
+    "tslint": "^5.8.0",
     "typedoc": "^0.6.0",
     "typescript": "~2.3.0",
     "walk": "^2.3.9",

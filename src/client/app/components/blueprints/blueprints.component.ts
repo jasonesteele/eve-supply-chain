@@ -18,6 +18,7 @@ export class BlueprintsComponent implements OnInit, AfterViewInit {
   @ViewChild('blueprintsTable') tableEl: ElementRef;
   @ViewChild('panel') panelEl: ElementRef;
 
+  isTableLoading: boolean;
   blueprints: BlueprintType[];
 
   private table: ReplaySubject<any> = new ReplaySubject<any>(1);
@@ -27,6 +28,7 @@ export class BlueprintsComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    this.isTableLoading = true;
     this.blueprintService.getBlueprints().subscribe(blueprints => {
       this.blueprints = blueprints;
       this.table.subscribe(table => {
@@ -34,6 +36,7 @@ export class BlueprintsComponent implements OnInit, AfterViewInit {
         if (this.blueprints.length > 0) {
           table.fnAddData(this.blueprints);
         }
+        setTimeout(() => { this.isTableLoading = false; }, 0);
       });
     });
   }
@@ -64,8 +67,10 @@ export class BlueprintsComponent implements OnInit, AfterViewInit {
       dom: '<"quick-filter"><"top"lip><"clear">r<"datatable-scroll"t><"bottom"ip><"clear">',
       pageLength: 25,
       lengthMenu: [25, 50, 100, 500],
-      order: [[1, "asc"]],
-      columnDefs: [{ targets: 0, orderable: false, width: '116px'}],
+      order: [[1, 'asc']],
+      columnDefs: [
+        {targets: 0, orderable: false, width: '116px'}
+      ],
       responsive: true,
     }));
 

@@ -29,7 +29,7 @@ export class ItemGroupService {
           for (const group of it) {
             groupMap.set(group.id, group);
           }
-          return vm.groups.next(groupMap)
+          return vm.groups.next(groupMap);
         },
         (err) => vm.groups.error(err),
         () => vm.groups.complete()

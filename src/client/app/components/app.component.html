@@ -20,12 +20,13 @@
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
-      Page Header
-      <small>Optional description</small>
+      {{ title }}
+      <small>{{ description }}</small>
     </h1>
+    <!-- TODO generate breadcrumbs from router info -->
     <ol class="breadcrumb">
-      <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
-      <li class="active">Here</li>
+      <li><a [routerLink]="['/']"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li class="active">Blueprints</li>
     </ol>
   </section>
 

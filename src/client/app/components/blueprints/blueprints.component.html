@@ -1,3 +1,6 @@
-<div #panel>
-  <table class="table" width="100%" #blueprintsTable></table>
+<div class="overlay-wrapper" #panel>
+  <table class="table table-hover" width="100%" #blueprintsTable></table>
+  <div class="overlay" *ngIf="isTableLoading">
+    <i class="fa fa-refresh fa-spin"></i>
+  </div>
 </div>

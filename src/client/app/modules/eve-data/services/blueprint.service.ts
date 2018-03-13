@@ -36,7 +36,7 @@ export class BlueprintService {
           for (const bp of it) {
             bpMap.set(bp.id, bp);
           }
-          return vm.blueprints.next(bpMap)
+          return vm.blueprints.next(bpMap);
         },
         (err) => vm.blueprints.error(err),
         () => vm.blueprints.complete()
@@ -53,7 +53,7 @@ export class BlueprintService {
     return this.blueprints
       .map(it => {
         return Array.from(it.values()).filter(it => {
-          return unpublished || it.published
+          return unpublished || it.published;
         });
       });
   }
@@ -144,14 +144,14 @@ export class BlueprintService {
     ], (json: any, types: ItemType[]) => {
       return json.map(it => {
         let type = types.find(typeIt => {
-          return typeIt && typeIt.id === it.typeID
+          return typeIt && typeIt.id === it.typeID;
         });
         let retval = {
           quantity: it.quantity,
           type: type
         };
         if (it.probability) {
-          Object.assign(retval, {probability: it.probability})
+          Object.assign(retval, {probability: it.probability});
         }
         return retval;
       });
@@ -172,12 +172,12 @@ export class BlueprintService {
     ], (json: any, types: ItemType[]) => {
       return json.map(it => {
         let type = types.find(typeIt => {
-          return typeIt && typeIt.id === it.typeID
+          return typeIt && typeIt.id === it.typeID;
         });
         return {
           type: type,
           level: it.level
-        }
+        };
       });
     });
   }

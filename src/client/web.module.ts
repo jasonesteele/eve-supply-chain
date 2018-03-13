@@ -23,7 +23,7 @@ import { MultilingualModule, Languages, translateLoaderFactory, MultilingualEffe
 import { SampleModule, SampleEffects } from './app/modules/sample/index';
 import { AppReducer } from './app/modules/ngrx/index';
 import { ApiModule } from './app/modules/esi-client/index';
-import { HttpClientModule } from "@angular/common/http";
+import { HttpClientModule } from '@angular/common/http';
 import { EveDataModule } from './app/modules/eve-data/index';
 
 // config

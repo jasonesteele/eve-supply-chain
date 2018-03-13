@@ -33,7 +33,7 @@ export class ItemTypeService {
           for (const type of it) {
             typeMap.set(type.id, type);
           }
-          return vm.types.next(typeMap)
+          return vm.types.next(typeMap);
         },
         (err) => vm.types.error(err),
         () => vm.types.complete()
